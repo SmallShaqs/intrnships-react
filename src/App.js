@@ -5,6 +5,7 @@ import Header from "./components/Header/Header";
 import PageContainer from "./components/Layout/PageContainer";
 
 import Slogan from "./components/Slogan/Slogan";
+import Search from "./components/Search/Search";
 
 const CenterSlogan = styled.div`
   margin: auto;
@@ -21,6 +22,7 @@ export default class App extends React.Component {
         <Header />
         <CenterSlogan>
           <Slogan />
+          <Search />
         </CenterSlogan>
       </PageContainer>
     );
