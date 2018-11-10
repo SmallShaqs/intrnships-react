@@ -37,6 +37,7 @@ const Container = styled.div`
   width: 600px;
   height: 100px;
   margin: auto;
+  padding-bottom: 20px;
 
   display: flex;
 `;
@@ -62,7 +63,7 @@ const EyeNumber = styled.p`
   margin-right: 5px;
 `;
 
-export default () => (
+export default ({ withEye = false }) => (
   <Container>
     <Image alt="Facebook Logo" src={FB_Logo} />
     <div style={{ width: 500 }}>
@@ -78,10 +79,12 @@ export default () => (
       </InlineContainer>
     </div>
     <Center>
-      <InlineContainer>
-        <EyeNumber>44</EyeNumber>
-        <EyeIcon alt="Eye Icon" src={Eye_Icon} />
-      </InlineContainer>
+      {withEye ? (
+        <InlineContainer>
+          <EyeNumber>44</EyeNumber>
+          <EyeIcon alt="Eye Icon" src={Eye_Icon} />
+        </InlineContainer>
+      ) : null}
     </Center>
   </Container>
 );

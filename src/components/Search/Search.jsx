@@ -14,6 +14,10 @@ const Container = styled.div`
 
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 
 const InputText = styled.p`
@@ -22,6 +26,10 @@ const InputText = styled.p`
   color: #000000;
   letter-spacing: 1.2px;
   margin-top: 0px;
+
+  @media (max-width: 767px) {
+    margin-top: 30px;
+  }
 `;
 
 export default () => (

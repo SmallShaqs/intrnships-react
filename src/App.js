@@ -28,7 +28,7 @@ const Title = styled.p`
   color: #000000;
   letter-spacing: 1.2px;
   text-align: center;
-  margin-bottom: 50px;
+  margin: 50px;
 `;
 
 export default class App extends React.Component {
@@ -43,6 +43,13 @@ export default class App extends React.Component {
 
         <Center>
           <Title>Featured</Title>
+          <JobCard withEye />
+          <JobCard withEye />
+          <JobCard withEye />
+
+          <Title>Today</Title>
+          <JobCard />
+          <JobCard />
           <JobCard />
         </Center>
       </PageContainer>

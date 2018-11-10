@@ -9,7 +9,11 @@ const Input = styled.input`
 
   padding: 5px;
   height: 35px;
-  width: 180px;
+
+  width: 100%;
+  @media (min-width: 767px) {
+    max-width: 180px;
+  }
 `;
 
 export default Input;
