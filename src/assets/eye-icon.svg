@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="14px" viewBox="0 0 18 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>Eye</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Job-Posting---Closed" transform="translate(-642.000000, -31.000000)" stroke="#111111" stroke-width="2">
+            <g id="Job">
+                <g id="Views" transform="translate(622.000000, 31.000000)">
+                    <g id="Eye" transform="translate(21.000000, 1.000000)">
+                        <path d="M0,6 C0,6 2.90909091,0 8,0 C13.0909091,0 16,6 16,6 C16,6 13.0909091,12 8,12 C2.90909091,12 0,6 0,6 Z" id="Path"></path>
+                        <ellipse id="Oval" cx="8" cy="6" rx="2.18181818" ry="2.25"></ellipse>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

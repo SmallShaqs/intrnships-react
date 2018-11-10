@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import FB_Logo from "../../assets/fb_logo.png";
+import Eye_Icon from "../../assets/eye-icon.svg";
 
 const Title = styled.p`
   font-family: MaisonNeue-Bold;
@@ -14,9 +15,6 @@ const InlineContainer = styled.div`
   display: flex;
   justify-content: left;
   margin: 15px 0px;
-  p {
-    margin: 0px;
-  }
 `;
 
 const Tags = styled.p`
@@ -24,6 +22,7 @@ const Tags = styled.p`
   font-size: 10px;
   color: #000;
   letter-spacing: 0.8px;
+  margin: 0px;
 `;
 
 const InfoTags = styled(Tags)`
@@ -48,10 +47,25 @@ const Image = styled.img`
   padding-right: 25px;
 `;
 
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const EyeIcon = styled.img``;
+
+const EyeNumber = styled.p`
+  font-family: MaisonNeue-Medium;
+  font-size: 10px;
+  color: #000;
+  margin-right: 5px;
+`;
+
 export default () => (
   <Container>
     <Image alt="Facebook Logo" src={FB_Logo} />
-    <div>
+    <div style={{ width: 500 }}>
       <Title>Senior DevOps Engineer</Title>
       <InlineContainer>
         <InfoTags>👨‍💻Software</InfoTags>
@@ -63,5 +77,11 @@ export default () => (
         <MetadataTags>#Kubernetes</MetadataTags>
       </InlineContainer>
     </div>
+    <Center>
+      <InlineContainer>
+        <EyeNumber>44</EyeNumber>
+        <EyeIcon alt="Eye Icon" src={Eye_Icon} />
+      </InlineContainer>
+    </Center>
   </Container>
 );
