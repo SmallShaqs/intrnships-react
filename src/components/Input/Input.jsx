@@ -3,10 +3,13 @@ import styled from "styled-components";
 
 const Input = styled.input`
   border-radius: 5px;
-  border: 1px solid D8D8D8;
+  border: 2px solid #d8d8d8;
 
-  height: 20px;
-  width: 150px;
+  font-size: 15px;
+
+  padding: 5px;
+  height: 35px;
+  width: 180px;
 `;
 
 export default Input;

@@ -8,22 +8,31 @@ const Container = styled.div`
   border-radius: 5px;
 
   margin-top: 50px;
-  padding: 50px;
+  padding: 40px;
+
+  text-align: left;
 
   display: flex;
   justify-content: space-between;
 `;
 
+const InputText = styled.p`
+  font-family: MaisonNeue-Medium;
+  font-size: 18px;
+  color: #000000;
+  letter-spacing: 1.2px;
+  margin-top: 0px;
+`;
+
 export default () => (
   <Container>
     <div>
-      <p>Location</p>
-      <Input />
+      <InputText>Location</InputText>
+      <Input placeholder="All" />
     </div>
     <div>
-      <p>Position</p>
-
-      <Input />
+      <InputText>Position</InputText>
+      <Input placeholder="All" />
     </div>
   </Container>
 );
