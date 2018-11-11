@@ -33,9 +33,9 @@ const Tag = styled(Tags)`
 `;
 
 const Container = styled.div`
-  width: 800px;
+  width: 710px;
   margin: auto;
-  padding-bottom: 30px;
+  padding-bottom: 25px;
 
   display: flex;
 `;

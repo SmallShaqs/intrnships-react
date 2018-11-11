@@ -19,7 +19,9 @@ import {
   Company
 } from "./jobCard/styled";
 
-const CompanyInfo = styled.div``;
+const CompanyInfo = styled.div`
+  width: 300px;
+`;
 
 const JobTags = styled.div``;
 
@@ -27,7 +29,7 @@ const JobViews = styled.div``;
 
 const Grid = styled.div``;
 
-export default ({ withEye = false, premium = false }) => {
+export default ({ company, position, tags, views, withEye = false, premium = false }) => {
   const [isPressed, setPressed] = React.useState(false);
 
   return (
@@ -35,8 +37,8 @@ export default ({ withEye = false, premium = false }) => {
       <Image alt="Facebook Logo" src={FB_Logo} />
 
       <CompanyInfo>
-        <Company>Facebook</Company>
-        <Title>Senior DevOps Engineer</Title>
+        <Company>{company}</Company>
+        <Title>{position}</Title>
         <Inline>
           <Info>👨‍💻Software</Info>
           <Info>🇩🇪Berlin, Germany</Info>
@@ -49,9 +51,9 @@ export default ({ withEye = false, premium = false }) => {
             style={{ width: 300, display: "flex", justifyContent: "center", alignItems: "center" }}
           >
             <Inline>
-              <Tag>#AWS</Tag>
-              <Tag>#Docker</Tag>
-              <Tag>#Kubernetes</Tag>
+              {tags.map(tag => (
+                <Tag>#{tag}</Tag>
+              ))}
             </Inline>
           </div>
 
@@ -60,7 +62,7 @@ export default ({ withEye = false, premium = false }) => {
           >
             {withEye ? (
               <Inline>
-                <EyeNumber>44</EyeNumber>
+                <EyeNumber>{views}</EyeNumber>
                 <EyeIcon alt="Eye Icon" src={Eye_Icon} />
               </Inline>
             ) : null}
@@ -77,9 +79,9 @@ export default ({ withEye = false, premium = false }) => {
             }}
           >
             <Inline>
-              <Tag>#AWS</Tag>
-              <Tag>#Docker</Tag>
-              <Tag>#Kubernetes</Tag>
+              {tags.map(tag => (
+                <Tag>#{tag}</Tag>
+              ))}
             </Inline>
           </div>
         </React.Fragment>

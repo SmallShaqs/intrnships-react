@@ -48,14 +48,26 @@ export default class App extends React.Component {
 
           <Center>
             <Title>Featured</Title>
-            <JobCard withEye premium />
-            <JobCard withEye premium />
-            <JobCard withEye premium />
+            <JobCard
+              company="Amazon"
+              position="Junior DevOps"
+              tags={["AWS", "Docker", "Kubernetes"]}
+              withEye
+              premium
+              views={124}
+            />
+            <JobCard
+              company="Google"
+              position="Intern"
+              tags={["Go", "C"]}
+              withEye
+              premium
+              views={12412}
+            />
 
             <Title>Today</Title>
-            <JobCard />
-            <JobCard />
-            <JobCard />
+            <JobCard company="Palantir" position="Java Deveoper" tags={["Java", "Kubernetes"]} />
+            <JobCard company="Airbnb" position="ML Scientist" tags={["ML", "Python"]} />
           </Center>
         </PageContainer>
       </AppWrapper>
