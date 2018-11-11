@@ -4,87 +4,86 @@ import styled from "styled-components";
 import FB_Logo from "../../assets/fb_logo.png";
 import Eye_Icon from "../../assets/eye-icon.svg";
 
-const Title = styled.p`
-  font-family: MaisonNeue-Bold;
-  font-size: 18px;
-  letter-spacing: 1.2px;
-  margin-bottom: 10px;
-`;
+import ExtraInfo from "./ExtraInfo";
 
-const InlineContainer = styled.div`
-  display: flex;
-  justify-content: left;
-  margin: 15px 0px;
-`;
+import {
+  EyeIcon,
+  EyeNumber,
+  Image,
+  Center,
+  Container,
+  Tag,
+  Info,
+  Inline,
+  Title,
+  Company
+} from "./jobCard/styled";
 
-const Tags = styled.p`
-  font-family: MaisonNeue-Medium;
-  font-size: 10px;
-  color: #000;
-  letter-spacing: 0.8px;
-  margin: 0px;
-`;
+const CompanyInfo = styled.div``;
 
-const InfoTags = styled(Tags)`
-  padding-right: 20px;
-`;
+const JobTags = styled.div``;
 
-const MetadataTags = styled(Tags)`
-  padding-right: 10px;
-`;
+const JobViews = styled.div``;
 
-const Container = styled.div`
-  width: 600px;
-  height: 100px;
-  margin: auto;
-  padding-bottom: 20px;
+const Grid = styled.div``;
 
-  display: flex;
-`;
+export default ({ withEye = false, premium = false }) => {
+  const [isPressed, setPressed] = React.useState(false);
 
-const Image = styled.img`
-  height: 60px;
-  align-self: center;
-  padding-right: 25px;
-`;
+  return (
+    <Container>
+      <Image alt="Facebook Logo" src={FB_Logo} />
 
-const Center = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+      <CompanyInfo>
+        <Company>Facebook</Company>
+        <Title>Senior DevOps Engineer</Title>
+        <Inline>
+          <Info>👨‍💻Software</Info>
+          <Info>🇩🇪Berlin, Germany</Info>
+        </Inline>
+      </CompanyInfo>
 
-const EyeIcon = styled.img``;
+      {premium ? (
+        <React.Fragment>
+          <div
+            style={{ width: 300, display: "flex", justifyContent: "center", alignItems: "center" }}
+          >
+            <Inline>
+              <Tag>#AWS</Tag>
+              <Tag>#Docker</Tag>
+              <Tag>#Kubernetes</Tag>
+            </Inline>
+          </div>
 
-const EyeNumber = styled.p`
-  font-family: MaisonNeue-Medium;
-  font-size: 10px;
-  color: #000;
-  margin-right: 5px;
-`;
-
-export default ({ withEye = false }) => (
-  <Container>
-    <Image alt="Facebook Logo" src={FB_Logo} />
-    <div style={{ width: 500 }}>
-      <Title>Senior DevOps Engineer</Title>
-      <InlineContainer>
-        <InfoTags>👨‍💻Software</InfoTags>
-        <InfoTags>🇩🇪Berlin, Germany</InfoTags>
-      </InlineContainer>
-      <InlineContainer>
-        <MetadataTags>#AWS</MetadataTags>
-        <MetadataTags>#Docker</MetadataTags>
-        <MetadataTags>#Kubernetes</MetadataTags>
-      </InlineContainer>
-    </div>
-    <Center>
-      {withEye ? (
-        <InlineContainer>
-          <EyeNumber>44</EyeNumber>
-          <EyeIcon alt="Eye Icon" src={Eye_Icon} />
-        </InlineContainer>
-      ) : null}
-    </Center>
-  </Container>
-);
+          <div
+            style={{ width: 50, display: "flex", justifyContent: "flex-end", alignItems: "center" }}
+          >
+            {withEye ? (
+              <Inline>
+                <EyeNumber>44</EyeNumber>
+                <EyeIcon alt="Eye Icon" src={Eye_Icon} />
+              </Inline>
+            ) : null}
+          </div>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <div
+            style={{
+              width: 350,
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center"
+            }}
+          >
+            <Inline>
+              <Tag>#AWS</Tag>
+              <Tag>#Docker</Tag>
+              <Tag>#Kubernetes</Tag>
+            </Inline>
+          </div>
+        </React.Fragment>
+      )}
+    </Container>
+  );
+};

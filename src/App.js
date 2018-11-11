@@ -31,28 +31,34 @@ const Title = styled.p`
   margin: 50px;
 `;
 
+const AppWrapper = styled.div`
+  font-family: MaisonNeue-Book;
+`;
+
 export default class App extends React.Component {
   render() {
     return (
-      <PageContainer>
-        <Header />
-        <CenterSlogan>
-          <Slogan />
-          <Search />
-        </CenterSlogan>
+      <AppWrapper>
+        <PageContainer>
+          <Header />
+          <CenterSlogan>
+            <Slogan />
+            <Search />
+          </CenterSlogan>
 
-        <Center>
-          <Title>Featured</Title>
-          <JobCard withEye />
-          <JobCard withEye />
-          <JobCard withEye />
+          <Center>
+            <Title>Featured</Title>
+            <JobCard withEye premium />
+            <JobCard withEye premium />
+            <JobCard withEye premium />
 
-          <Title>Today</Title>
-          <JobCard />
-          <JobCard />
-          <JobCard />
-        </Center>
-      </PageContainer>
+            <Title>Today</Title>
+            <JobCard />
+            <JobCard />
+            <JobCard />
+          </Center>
+        </PageContainer>
+      </AppWrapper>
     );
   }
 }
