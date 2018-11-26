@@ -1,0 +1,61 @@
+import React, { Fragment } from "react";
+
+import Input from "../Input/Input";
+import AdvancedInput from "../AdvancedInput/AdvancedInput";
+
+export default ({
+  inputs: {
+    position,
+    mainLanguage,
+    techRequirements,
+    personalRequirements,
+    weOffer,
+    activities,
+    salary
+  },
+  onChangePosition,
+  onChangeMainLanguage,
+  onInputAdd,
+  onInputChange,
+  onInputRemove,
+  onChangeSalary
+}) => (
+  <Fragment>
+    <Input title="Position" inputValue={position} onChangeInput={onChangePosition} />
+    <Input title="Main Language" inputValue={mainLanguage} onChangeInput={onChangeMainLanguage} />
+
+    <AdvancedInput
+      title="Job Activities"
+      inputs={activities}
+      onInputsChange={() => onInputChange("activities")}
+      onInputAdd={() => onInputAdd("activities")}
+      onInputDelete={() => onInputRemove("activities")}
+    />
+
+    <AdvancedInput
+      title="Tech Requirements"
+      inputs={techRequirements}
+      onInputsChange={() => onInputChange("techRequirements")}
+      onInputAdd={() => onInputAdd("techRequirements")}
+      onInputDelete={() => onInputRemove("techRequirements")}
+    />
+
+    <AdvancedInput
+      title="Personal Requirements"
+      inputs={personalRequirements}
+      onInputsChange={() => onInputChange("personalRequirements")}
+      onInputAdd={() => onInputAdd("personalRequirements")}
+      onInputDelete={() => onInputRemove("personalRequirements")}
+    />
+
+    <AdvancedInput
+      title="We Offer"
+      inputs={weOffer}
+      onInputsChange={() => onInputChange("weOffer")}
+      onInputAdd={() => onInputAdd("weOffer")}
+      onInputDelete={() => onInputRemove("weOffer")}
+    />
+
+    <Input title="Salary" type="number" inputValue={salary} onChangeInput={onChangeSalary} />
+  </Fragment>
+);

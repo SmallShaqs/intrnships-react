@@ -1,37 +1,57 @@
 import React from "react";
+import styled from "styled-components";
+import JobInformationInputs from "./postPage/JobInformation/JobInformation";
+import CompanyInformation from "./postPage/CompanyInformation/CompanyInformation";
 
-import Input from "./postPage/Input/Input";
-import AdvancedInput from "./postPage/AdvancedInput/AdvancedInput";
+const Title = styled.p`
+  font-family: MaisonNeue-Demi;
+  font-size: 20px;
+  color: #000000;
+  letter-spacing: 1.8px;
+
+  margin-top: 100px;
+  margin-bottom: 60px;
+`;
 
 export default class extends React.Component {
   state = {
     position: "",
     mainLanguage: "",
     salary: "",
-
     activities: [""],
-    techRequirements: [""]
+    techRequirements: [""],
+    personalRequirements: [""],
+    weOffer: [""],
+
+    companyName: "",
+    companyEmail: "",
+    aboutCompany: "",
+    facebookURL: "",
+    instagramURL: "",
+    mediumURL: ""
   };
 
   onChangePosition = ({ target: { value } }) => this.setState({ position: value });
   onChangeSalary = ({ target: { value } }) => this.setState({ salary: value });
   onChangeMainLanguage = ({ target: { value } }) => this.setState({ mainLanguage: value });
 
-  onActivityChange = ({ target: { value } }, info, idx) => {
+  onInputFieldChange = ({ target: { value } }, name) => this.setState({ [name]: value });
+
+  onInputChange = ({ target: { value } }, info, idx) => {
     const partialState = this.state[info];
     partialState[idx] = value;
 
     this.setState({ [info]: partialState });
   };
 
-  onActivityAdd = info => {
+  onInputAdd = info => {
     const partialState = this.state[info];
     partialState.push("");
 
     this.setState({ [info]: partialState });
   };
 
-  onActivityRemove = (info, idx) => {
+  onInputRemove = (info, idx) => {
     const partialState = this.state[info];
     partialState.splice(idx, 1);
 
@@ -43,35 +63,19 @@ export default class extends React.Component {
 
     return (
       <div>
-        <Input title="Position" inputValue={position} onChangeInput={this.onChangePosition} />
-        <Input
-          title="Main Language"
-          inputValue={mainLanguage}
-          onChangeInput={this.onChangeMainLanguage}
+        <Title>Job Information</Title>
+        <JobInformationInputs
+          inputs={this.state}
+          onChangePosition={this.onChangePosition}
+          onChangeSalary={this.onChangeSalary}
+          onChangeMainLanguage={this.onChangeMainLanguage}
+          onInputChange={this.onInputChange}
+          onInputAdd={this.onInputAdd}
+          onInputRemove={this.onInputRemove}
         />
 
-        <AdvancedInput
-          title="Job Activities"
-          inputs={activities}
-          onInputsChange={() => this.onActivityChange("activities")}
-          onInputAdd={() => this.onActivityAdd("activities")}
-          onInputDelete={() => this.onActivityRemove("activities")}
-        />
-
-        <AdvancedInput
-          title="Tech Requirements"
-          inputs={techRequirements}
-          onInputsChange={() => this.onActivityChange("techRequirements")}
-          onInputAdd={() => this.onActivityAdd("techRequirements")}
-          onInputDelete={() => this.onActivityRemove("techRequirements")}
-        />
-
-        <Input
-          title="Salary"
-          type="number"
-          inputValue={salary}
-          onChangeInput={this.onChangeSalary}
-        />
+        <Title>Company Information</Title>
+        <CompanyInformation inputs={this.state} onInputFieldChange={this.onInputFieldChange} />
       </div>
     );
   }
