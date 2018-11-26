@@ -18,6 +18,10 @@ const RedButton = styled.div`
 
   width: 110px;
   height: 45px;
+
+  :hover {
+    background-color: #db0033;
+  }
 `;
 
 export default ({ title }) => <RedButton>{title}</RedButton>;

@@ -41,37 +41,34 @@ export default class App extends React.Component {
   render() {
     return (
       <AppWrapper>
-        <PageContainer>
-          <Header />
-          <CenterSlogan>
-            <Slogan />
-            <Search />
-          </CenterSlogan>
+        <CenterSlogan>
+          <Slogan />
+          <Search />
+        </CenterSlogan>
 
-          <Center>
-            <Title>Featured</Title>
-            <JobCard
-              company="Amazon"
-              position="Junior DevOps"
-              tags={["AWS", "Docker", "Kubernetes"]}
-              withEye
-              premium
-              views={124}
-            />
-            <JobCard
-              company="Google"
-              position="Intern"
-              tags={["Go", "C"]}
-              withEye
-              premium
-              views={12412}
-            />
+        <Center>
+          <Title>Featured</Title>
+          <JobCard
+            company="Amazon"
+            position="Junior DevOps"
+            tags={["AWS", "Docker", "Kubernetes"]}
+            withEye
+            premium
+            views={124}
+          />
+          <JobCard
+            company="Google"
+            position="Intern"
+            tags={["Go", "C"]}
+            withEye
+            premium
+            views={12412}
+          />
 
-            <Title>Today</Title>
-            <JobCard company="Palantir" position="Java Deveoper" tags={["Java", "Kubernetes"]} />
-            <JobCard company="Airbnb" position="ML Scientist" tags={["ML", "Python"]} />
-          </Center>
-        </PageContainer>
+          <Title>Today</Title>
+          <JobCard company="Palantir" position="Java Deveoper" tags={["Java", "Kubernetes"]} />
+          <JobCard company="Airbnb" position="ML Scientist" tags={["ML", "Python"]} />
+        </Center>
       </AppWrapper>
     );
   }
