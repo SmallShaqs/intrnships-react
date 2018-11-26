@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-import Header from "./components/Header/Header";
-import PageContainer from "./components/Layout/PageContainer";
+import { BrowserRouter, Route } from "react-router-dom";
 
-import Slogan from "./components/Slogan/Slogan";
-import Search from "./components/Search/Search";
+import Header from "../components/Header/Header";
+import PageContainer from "../components/Layout/PageContainer";
 
-import JobCard from "./components/JobCard/JobCard";
+import Slogan from "../components/Slogan/Slogan";
+import Search from "../components/Search/Search";
+
+import JobCard from "../components/JobCard/JobCard";
 
 const CenterSlogan = styled.div`
   margin: auto;
