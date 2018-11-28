@@ -31,7 +31,7 @@ export default class extends React.Component {
   state = {
     position: "",
     mainLanguage: "",
-    optionalLang: null,
+    optionalLang: [],
     salary: "",
     activities: [""],
     techRequirements: [""],
@@ -90,7 +90,7 @@ export default class extends React.Component {
 
     if (!this.state.position) this.setState({ positionErr: true });
     if (!this.state.mainLanguage) this.setState({ mainLangErr: true });
-    if (!this.state.optionalLang) this.setState({ optionalLangErr: true });
+    if (this.state.optionalLang.length <= 0) this.setState({ optionalLangErr: true });
     if (!this.state.salary) this.setState({ salaryError: true });
     if (!this.state.companyName) this.setState({ nameErr: true });
     if (!this.state.emailErr) this.setState({ emailErr: true });
@@ -143,7 +143,7 @@ export default class extends React.Component {
               <StyledCol md={4}>
                 <Field
                   label="Position"
-                  invalidMessage="Field is required!"
+                  invalidMessage="This field is required"
                   isInvalid={positionErr}
                   isRequired
                 >
@@ -159,7 +159,7 @@ export default class extends React.Component {
               <StyledCol lg={4}>
                 <Field
                   label="main language"
-                  invalidMessage="Field is required!"
+                  invalidMessage="This field is required"
                   isInvalid={mainLangErr}
                   helperText="This language will be shown higher in searches"
                   isRequired
@@ -171,7 +171,8 @@ export default class extends React.Component {
                       { value: "go", label: "Golang" },
                       { value: "node", label: "Node.js" }
                     ]}
-                    onChange={({ value }) => {
+                    value={this.state.mainLanguage}
+                    onInputChange={({ value }) => {
                       console.log(this.state);
                       this.setState({ mainLanguage: value });
                     }}
@@ -181,7 +182,7 @@ export default class extends React.Component {
               <StyledCol lg={4}>
                 <Field
                   label="opt languages"
-                  invalidMessage="Field is required!"
+                  invalidMessage="This field is required"
                   isInvalid={optionalLangErr}
                   isRequired
                 >
@@ -194,12 +195,17 @@ export default class extends React.Component {
                       { value: "go", label: "Golang" },
                       { value: "node", label: "Node.js" }
                     ]}
+                    input={this.state.optionalLang.map(v => ({ value: v, label: v })) || []}
                     onChange={values => {
-                      console.log(this.state);
-                      if (!values.length) this.setState({ optionalLang: null });
+                      console.log(values);
+                      if (!values.length)
+                        this.setState({
+                          optionalLang: [],
+                          optionalLangErr: true
+                        });
                       else {
                         const parsed = values.map(v => v.value);
-                        this.setState({ optionalLang: parsed });
+                        this.setState({ optionalLang: parsed, optionalLangErr: undefined });
                       }
                     }}
                   />
@@ -254,9 +260,9 @@ export default class extends React.Component {
             </Row>
 
             <Row>
-              <StyledCol md={2}>
+              <StyledCol md={3}>
                 <Field
-                  invalidMessage="Field is required!"
+                  invalidMessage="This field is required"
                   isInvalid={salaryError}
                   label="salary"
                   isRequired
@@ -266,7 +272,6 @@ export default class extends React.Component {
                     type="number"
                     value={salary}
                     onChange={e => this.this.onInputFieldChange(e, "salary")}
-                    isRequired
                     shouldFitContainer
                   />
                 </Field>
@@ -277,16 +282,18 @@ export default class extends React.Component {
             <Row>
               <StyledCol md={4}>
                 <Field
-                  invalidMessage="Field is required!"
+                  invalidMessage="This field is required"
                   isInvalid={nameErr}
                   label="Company Name"
                   isRequired
                 >
                   <FieldText
                     label="company-name"
+                    value={companyName}
                     onChange={e => this.onInputFieldChange(e, "companyName")}
-                    isRequired
                     shouldFitContainer
+                    required
+                    validateOnChange
                   />
                 </Field>
               </StyledCol>
@@ -294,16 +301,18 @@ export default class extends React.Component {
             <Row>
               <StyledCol md={4}>
                 <Field
-                  invalidMessage="Field is required!"
+                  invalidMessage="This field is required"
                   isInvalid={emailErr}
                   label="Company Email"
                   isRequired
                 >
                   <FieldText
                     label="company-email"
+                    value={companyEmail}
                     onChange={e => this.onInputFieldChange(e, "companyEmail")}
-                    isRequired
                     shouldFitContainer
+                    required
+                    validateOnChange
                   />
                 </Field>
               </StyledCol>
@@ -321,34 +330,31 @@ export default class extends React.Component {
 
             <Row>
               <StyledCol>
-                <Field label="Facebook" isRequired>
+                <Field label="Facebook">
                   <FieldText
                     label="facebook-url"
                     onChange={e => this.onInputFieldChange(e, "companyEmail")}
-                    inputValue={facebookURL}
-                    isRequired
+                    value={facebookURL}
                     shouldFitContainer
                   />
                 </Field>
               </StyledCol>
               <StyledCol>
-                <Field label="Instagram" isRequired>
+                <Field label="Instagram">
                   <FieldText
                     label="instagram-url"
                     onChange={e => this.onInputFieldChange(e, "companyName")}
-                    inputValue={instagramURL}
-                    isRequired
+                    value={instagramURL}
                     shouldFitContainer
                   />
                 </Field>
               </StyledCol>
               <StyledCol>
-                <Field label="Medium" isRequired>
+                <Field label="Medium">
                   <FieldText
                     label="medium-url"
                     onChange={e => this.onInputFieldChange(e, "companyName")}
-                    inputValue={mediumURL}
-                    isRequired
+                    value={mediumURL}
                     shouldFitContainer
                   />
                 </Field>
