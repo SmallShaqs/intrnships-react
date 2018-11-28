@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+
 import JobInformationInputs from "./postPage/JobInformation/JobInformation";
 import CompanyInformation from "./postPage/CompanyInformation/CompanyInformation";
+
+import Button from "../components/buttons/CTA/CallToAction";
 
 const Title = styled.p`
   font-family: MaisonNeue-Demi;
@@ -74,7 +77,7 @@ export default class extends React.Component {
 
         <Title>Company Information</Title>
         <CompanyInformation inputs={this.state} onInputFieldChange={this.onInputFieldChange} />
-        <button onClick={this.onSubmit}>Submit</button>
+        <Button title="Submit" onClick={this.onSubmit} />
       </div>
     );
   }
