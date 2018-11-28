@@ -40,11 +40,22 @@ const PostInput = ({
   onChangeInput,
   addInput,
   buttonSign,
-  deleteInput
+  deleteInput,
+
+  optionName,
+  options
 }) => (
   <Container>
     {title && <Title>{title.toUpperCase()}</Title>}
-    <Input type={type} onChange={onChangeInput} value={inputValue} />
+    <Input type={type} onChange={onChangeInput} value={inputValue} list={optionName} />
+    {options.length ? (
+      <datalist id={optionName}>
+        {options.map(option => (
+          <option value={option} />
+        ))}
+      </datalist>
+    ) : null}
+
     {addInput && (
       <Button onClick={buttonSign === "+" ? addInput : deleteInput}>{buttonSign}</Button>
     )}
@@ -53,6 +64,8 @@ const PostInput = ({
 PostInput.defaultProps = {
   type: "text",
   title: false,
+  optionName: false,
+  options: [],
   buttonSign: "+"
 };
 

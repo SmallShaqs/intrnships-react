@@ -26,6 +26,8 @@ export default ({
     />
     <Input
       title="Main Language"
+      optionName="languages"
+      options={["React", "Golang", "Node.js"]}
       inputValue={mainLanguage}
       onChangeInput={e => onInputFieldChange(e, "mainLanguage")}
     />
