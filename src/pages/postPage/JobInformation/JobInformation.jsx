@@ -13,49 +13,60 @@ export default ({
     activities,
     salary
   },
-  onChangePosition,
-  onChangeMainLanguage,
+  onInputFieldChange,
   onInputAdd,
   onInputChange,
-  onInputRemove,
-  onChangeSalary
+  onInputRemove
 }) => (
   <Fragment>
-    <Input title="Position" inputValue={position} onChangeInput={onChangePosition} />
-    <Input title="Main Language" inputValue={mainLanguage} onChangeInput={onChangeMainLanguage} />
+    <Input
+      title="Position"
+      inputValue={position}
+      onChangeInput={e => onInputFieldChange(e, "position")}
+    />
+    <Input
+      title="Main Language"
+      inputValue={mainLanguage}
+      onChangeInput={e => onInputFieldChange(e, "mainLanguage")}
+    />
 
     <AdvancedInput
       title="Job Activities"
       inputs={activities}
-      onInputsChange={() => onInputChange("activities")}
-      onInputAdd={() => onInputAdd("activities")}
-      onInputDelete={() => onInputRemove("activities")}
+      onInputsChange={onInputChange("activities")}
+      onInputAdd={onInputAdd("activities")}
+      onInputDelete={onInputRemove("activities")}
     />
 
     <AdvancedInput
       title="Tech Requirements"
       inputs={techRequirements}
-      onInputsChange={() => onInputChange("techRequirements")}
-      onInputAdd={() => onInputAdd("techRequirements")}
-      onInputDelete={() => onInputRemove("techRequirements")}
+      onInputsChange={onInputChange("techRequirements")}
+      onInputAdd={onInputAdd("techRequirements")}
+      onInputDelete={onInputRemove("techRequirements")}
     />
 
     <AdvancedInput
       title="Personal Requirements"
       inputs={personalRequirements}
-      onInputsChange={() => onInputChange("personalRequirements")}
-      onInputAdd={() => onInputAdd("personalRequirements")}
-      onInputDelete={() => onInputRemove("personalRequirements")}
+      onInputsChange={onInputChange("personalRequirements")}
+      onInputAdd={onInputAdd("personalRequirements")}
+      onInputDelete={onInputRemove("personalRequirements")}
     />
 
     <AdvancedInput
       title="We Offer"
       inputs={weOffer}
-      onInputsChange={() => onInputChange("weOffer")}
-      onInputAdd={() => onInputAdd("weOffer")}
-      onInputDelete={() => onInputRemove("weOffer")}
+      onInputsChange={onInputChange("weOffer")}
+      onInputAdd={onInputAdd("weOffer")}
+      onInputDelete={onInputRemove("weOffer")}
     />
 
-    <Input title="Salary" type="number" inputValue={salary} onChangeInput={onChangeSalary} />
+    <Input
+      title="Salary"
+      type="number"
+      inputValue={salary}
+      onChangeInput={e => onInputFieldChange(e, "salary")}
+    />
   </Fragment>
 );
