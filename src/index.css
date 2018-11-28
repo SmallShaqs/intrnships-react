@@ -1,0 +1,23 @@
+body {
+  font-family: "Helvetica";
+}
+
+label {
+  color: black !important;
+  text-transform: uppercase;
+  font-family: "MaisonNeue-Medium" !important;
+  font-size: 16px !important;
+  letter-spacing: 1.2px;
+}
+
+div > div > label > div > span {
+  color: black !important;
+  text-transform: uppercase;
+  font-family: "MaisonNeue-Medium" !important;
+  font-size: 16px !important;
+  letter-spacing: 1.2px;
+}
+
+div:nth-child(1) > div > span {
+  font-size: 11px;
+}

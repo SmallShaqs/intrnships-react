@@ -21,7 +21,12 @@ const RedButton = styled.div`
 
   :hover {
     background-color: #db0033;
+    cursor: pointer;
   }
 `;
 
-export default ({ title }) => <RedButton>{title}</RedButton>;
+export default ({ title, type = undefined, onClick = () => {} }) => (
+  <RedButton type={type} onClick={onClick}>
+    {title}
+  </RedButton>
+);

@@ -1,25 +1,11 @@
 import React, { Fragment, useState } from "react";
+import { Container, Row, Col } from "react-grid-system";
+
 import styled from "styled-components";
 
-const Title = styled.p`
-  font-family: MaisonNeue-Medium;
-  font-size: 16px;
-  color: #000000;
-  letter-spacing: 1.2px;
-`;
-
-const Input = styled.input`
-  background: #fcfcfc;
-  border: 1px solid #d8d8d8;
-  border-radius: 5px;
-
-  padding: 8px;
-  min-width: 200px;
-`;
-
-const Container = styled.div`
-  margin-bottom: 30px;
-`;
+import FieldText from "@atlaskit/field-text";
+import Select from "@atlaskit/select";
+import Form, { Field } from "@atlaskit/form";
 
 const Button = styled.button`
   background: #ff285a;
@@ -29,8 +15,9 @@ const Button = styled.button`
   font-size: 12px;
 
   margin-left: 20px;
-  height: 35px;
-  width: 35px;
+  margin-top: 8px;
+  height: 40px;
+  width: 40px;
 `;
 
 const PostInput = ({
@@ -41,32 +28,52 @@ const PostInput = ({
   addInput,
   buttonSign,
   deleteInput,
-
   optionName,
-  options
+  options,
+  selectProps
 }) => (
-  <Container>
-    {title && <Title>{title.toUpperCase()}</Title>}
-    <Input type={type} onChange={onChangeInput} value={inputValue} list={optionName} />
-    {options.length ? (
-      <datalist id={optionName}>
-        {options.map(option => (
-          <option value={option} />
-        ))}
-      </datalist>
-    ) : null}
-
-    {addInput && (
-      <Button onClick={buttonSign === "+" ? addInput : deleteInput}>{buttonSign}</Button>
+  <div>
+    {title && (
+      <Field label={title.toUpperCase()}>
+        <div />
+      </Field>
     )}
-  </Container>
+
+    <Row>
+      <Col md={11}>
+        <Field isLabelHidden>
+          <FieldText onChangeInput={onChangeInput} value={inputValue} shouldFitContainer />
+        </Field>
+      </Col>
+      <Col md={1}>
+        {addInput && (
+          <Button
+            onClick={
+              buttonSign === "+"
+                ? e => {
+                    e.preventDefault();
+                    addInput();
+                  }
+                : e => {
+                    e.preventDefault();
+                    deleteInput();
+                  }
+            }
+          >
+            {buttonSign}
+          </Button>
+        )}
+      </Col>
+    </Row>
+  </div>
 );
 PostInput.defaultProps = {
   type: "text",
   title: false,
   optionName: false,
   options: [],
-  buttonSign: "+"
+  buttonSign: "+",
+  selectProps: {}
 };
 
 export default PostInput;
