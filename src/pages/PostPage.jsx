@@ -2,16 +2,33 @@ import React from "react";
 import styled from "styled-components";
 
 import { Container, Row, Col } from "react-grid-system";
-import Select from "@atlaskit/select";
-import FieldText from "@atlaskit/field-text";
-import Form, { Field, FormHeader, FormSection, FormFooter, Validator } from "@atlaskit/form";
-import FieldTextArea from "@atlaskit/field-text-area";
 
 import JobInformationInputs from "./postPage/JobInformation/JobInformation";
 import CompanyInformation from "./postPage/CompanyInformation/CompanyInformation";
 
-import Button from "../components/buttons/CTA/CallToAction";
+import SubmitButton from "../components/buttons/CTA/CallToAction";
 import AdvancedInput from "./postPage/AdvancedInput/AdvancedInput";
+
+import {
+  Form,
+  Select,
+  Button,
+  Input,
+  InputNumber,
+  Switch,
+  Radio,
+  Slider,
+  Upload,
+  Icon,
+  Rate
+} from "antd";
+import TextArea from "antd/lib/input/TextArea";
+
+const Option = Select.Option;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+
+const FormItem = Form.Item;
 
 const Title = styled.p`
   font-family: MaisonNeue-Demi;
@@ -27,339 +44,284 @@ const StyledCol = styled(Col)`
   margin-bottom: 30px;
 `;
 
-export default class extends React.Component {
-  state = {
-    position: "",
-    mainLanguage: "",
-    optionalLang: null,
-    salary: "",
-    activities: [""],
-    techRequirements: [""],
-    personalRequirements: [""],
-    weOffer: [""],
+const FormTitle = styled.p`
+  color: #000000 !important;
+  font-weight: 500 !important;
+  font-family: "MaisonNeue-Medium" !important;
+  font-size: 16px !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase;
+`;
 
-    companyName: "",
-    companyEmail: "",
-    aboutCompany: "",
-    facebookURL: "",
-    instagramURL: "",
-    mediumURL: "",
+const CONST = {
+  jobActivities: 0,
+  techRequirements: 1,
+  personalRequirements: 2,
+  weOffer: 3
+};
+let multipleFields = [0, 0, 0, 0];
 
-    positionErr: undefined,
-    mainLangErr: undefined,
-    optionalLangErr: undefined,
-    salaryError: undefined,
-    nameErr: undefined,
-    emailErr: undefined,
-    aboutErr: undefined
+class PostPage extends React.Component {
+  remove = (k, distinctID) => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue("keys");
+    // We need at least one passenger
+    if (keys.length === 1) {
+      return;
+    }
+
+    // can use data-binding to set
+    const newKeys = keys;
+    keys[distinctID] = keys[distinctID].filter(key => key !== k);
+
+    form.setFieldsValue({ keys: newKeys });
   };
 
-  onInputFieldChange = ({ target: { value } }, name) => this.setState({ [name]: value });
+  add = distinctFormID => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue("keys");
 
-  onInputChange = info => ({ target: { value } }, idx) => {
-    const partialState = this.state[info];
-    partialState[idx] = value;
+    let lastEl = keys[distinctFormID][keys[distinctFormID].length - 1];
+    if (!lastEl) lastEl = 0;
 
-    this.setState({ [info]: partialState });
+    const nextKeys = keys;
+    nextKeys[distinctFormID].push(1 + lastEl);
+
+    form.setFieldsValue({
+      keys: nextKeys
+    });
   };
 
-  onInputAdd = info => () => {
-    const partialState = this.state[info];
-    partialState.push("");
+  componentDidMount() {
+    const { form } = this.props;
+    form.setFieldsValue({ keys: [[], [], [], []] });
+  }
 
-    this.setState({ [info]: partialState });
+  getAllInputFields = distincID => {
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+
+    getFieldDecorator("keys", { initialValue: [] });
+    const keys = getFieldValue("keys");
+
+    let formItems = null;
+    if (keys[distincID])
+      formItems = keys[distincID].map((k, index) => {
+        return (
+          <FormItem label="" required={false} key={distincID + k}>
+            {getFieldDecorator(`names[${distincID}${k}]`, {
+              validateTrigger: ["onChange", "onBlur"],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "Please input passenger's name or delete this field."
+                }
+              ]
+            })(<Input size="large" style={{ width: "90%", marginRight: 8 }} />)}
+            {keys.length > 1 ? (
+              <Icon
+                className="dynamic-delete-button"
+                type="minus-circle-o"
+                disabled={keys.length === 1}
+                onClick={() => this.remove(k, distincID)}
+              />
+            ) : null}
+          </FormItem>
+        );
+      });
+    return formItems;
   };
 
-  onInputRemove = info => idx => {
-    const partialState = this.state[info];
-    partialState.splice(idx, 1);
-
-    this.setState({ [info]: partialState });
-  };
-
-  onSubmit = () => {
-    const {
-      positionErr,
-      mainLangErr,
-      optionalLangErr,
-      salaryError,
-      nameErr,
-      emailErr,
-      aboutErr
-    } = this.state;
-
-    if (!this.state.position) this.setState({ positionErr: true });
-    if (!this.state.mainLanguage) this.setState({ mainLangErr: true });
-    if (!this.state.optionalLang) this.setState({ optionalLangErr: true });
-    if (!this.state.salary) this.setState({ salaryError: true });
-    if (!this.state.companyName) this.setState({ nameErr: true });
-    if (!this.state.emailErr) this.setState({ emailErr: true });
-    if (!this.state.aboutCompany) this.setState({ aboutErr: true });
-
-    const validateResult = this.formRef.validate();
-    console.log(this.formRef);
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
   };
 
   render() {
-    const {
-      position,
-      mainLanguage,
-      optionalLang,
-      salary,
-      activities,
-      techRequirements,
-      personalRequirements,
-      weOffer,
-      companyName,
-      companyEmail,
-      aboutCompany,
-      facebookURL,
-      mediumURL,
-      instagramURL
-    } = this.state;
-
-    const {
-      positionErr,
-      mainLangErr,
-      optionalLangErr,
-      salaryError,
-      nameErr,
-      emailErr,
-      aboutErr
-    } = this.state;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
 
     return (
       <div>
-        <Form
-          name="layout-example"
-          ref={form => {
-            this.formRef = form;
-          }}
-        >
-          <FormSection name="text-fields">
-            <Title>Job Information</Title>
-
-            <Row>
-              <StyledCol md={4}>
-                <Field
-                  label="Position"
-                  invalidMessage="Field is required!"
-                  isInvalid={positionErr}
-                  isRequired
+        <Form onSubmit={this.handleSubmit}>
+          <Title>Job Information</Title>
+          <Row>
+            <StyledCol md={4}>
+              <FormTitle>Position</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("position", {
+                  rules: [{ required: true, message: "Please input your username!" }]
+                })(<Input size="large" />)}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol lg={4}>
+              <FormTitle>Main Language</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("main-language", {
+                  rules: [{ required: true, message: "Please select your country!" }]
+                })(
+                  <Select size="large">
+                    <Option value="react">React</Option>
+                    <Option value="golang">Golang</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </StyledCol>
+            <StyledCol lg={4}>
+              <FormTitle>Optional Language</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("optional-language", {
+                  rules: [{ required: true, message: "Please select your country!" }]
+                })(
+                  <Select mode="multiple" size="large">
+                    <Option value="node">Node.js</Option>
+                    <Option value="golang">Golang</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={8}>
+              <FormTitle>Job Activities</FormTitle>
+              {this.getAllInputFields(CONST.jobActivities)}
+              <FormItem>
+                <Button
+                  type="dashed"
+                  onClick={() => this.add(CONST.jobActivities)}
+                  style={{ width: "60%" }}
                 >
-                  <FieldText
-                    value={position}
-                    onChange={e => this.onInputFieldChange(e, "position")}
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-            </Row>
-            <Row>
-              <StyledCol lg={4}>
-                <Field
-                  label="main language"
-                  invalidMessage="Field is required!"
-                  isInvalid={mainLangErr}
-                  helperText="This language will be shown higher in searches"
-                  isRequired
+                  <Icon type="plus" /> Add field
+                </Button>
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={8}>
+              <FormTitle>Tech Requirements</FormTitle>
+              {this.getAllInputFields(CONST.techRequirements)}
+              <FormItem>
+                <Button
+                  type="dashed"
+                  onClick={() => this.add(CONST.techRequirements)}
+                  style={{ width: "60%" }}
                 >
-                  <Select
-                    label="main language"
-                    options={[
-                      { value: "react", label: "React" },
-                      { value: "go", label: "Golang" },
-                      { value: "node", label: "Node.js" }
-                    ]}
-                    onChange={({ value }) => {
-                      console.log(this.state);
-                      this.setState({ mainLanguage: value });
-                    }}
-                  />
-                </Field>
-              </StyledCol>
-              <StyledCol lg={4}>
-                <Field
-                  label="opt languages"
-                  invalidMessage="Field is required!"
-                  isInvalid={optionalLangErr}
-                  isRequired
+                  <Icon type="plus" /> Add field
+                </Button>
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={8}>
+              <FormTitle>People Requirements</FormTitle>
+              {this.getAllInputFields(CONST.personalRequirements)}
+              <FormItem>
+                <Button
+                  type="dashed"
+                  onClick={() => this.add(CONST.personalRequirements)}
+                  style={{ width: "60%" }}
                 >
-                  <Select
-                    label="opt languages"
-                    isMulti
-                    isSearchable
-                    options={[
-                      { value: "react", label: "React" },
-                      { value: "go", label: "Golang" },
-                      { value: "node", label: "Node.js" }
-                    ]}
-                    onChange={values => {
-                      console.log(this.state);
-                      if (!values.length) this.setState({ optionalLang: null });
-                      else {
-                        const parsed = values.map(v => v.value);
-                        this.setState({ optionalLang: parsed });
-                      }
-                    }}
-                  />
-                </Field>
-              </StyledCol>
-            </Row>
-
-            <Row>
-              <StyledCol md={8}>
-                <AdvancedInput
-                  title="Job Activities"
-                  inputs={activities}
-                  onInputsChange={this.onInputChange("activities")}
-                  onInputAdd={this.onInputAdd("activities")}
-                  onInputDelete={this.onInputRemove("activities")}
-                />
-              </StyledCol>
-            </Row>
-
-            <Row>
-              <StyledCol md={8}>
-                <AdvancedInput
-                  title="Tech Requirements"
-                  inputs={techRequirements}
-                  onInputsChange={this.onInputChange("techRequirements")}
-                  onInputAdd={this.onInputAdd("techRequirements")}
-                  onInputDelete={this.onInputRemove("techRequirements")}
-                />
-              </StyledCol>
-            </Row>
-            <Row>
-              <StyledCol md={8}>
-                <AdvancedInput
-                  title="Personal Requirements"
-                  inputs={personalRequirements}
-                  onInputsChange={this.onInputChange("personalRequirements")}
-                  onInputAdd={this.onInputAdd("personalRequirements")}
-                  onInputDelete={this.onInputRemove("personalRequirements")}
-                />
-              </StyledCol>
-            </Row>
-            <Row>
-              <StyledCol md={8}>
-                <AdvancedInput
-                  title="We Offer"
-                  inputs={weOffer}
-                  onInputsChange={this.onInputChange("weOffer")}
-                  onInputAdd={this.onInputAdd("weOffer")}
-                  onInputDelete={this.onInputRemove("weOffer")}
-                />
-              </StyledCol>
-            </Row>
-
-            <Row>
-              <StyledCol md={2}>
-                <Field
-                  invalidMessage="Field is required!"
-                  isInvalid={salaryError}
-                  label="salary"
-                  isRequired
+                  <Icon type="plus" /> Add field
+                </Button>
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={8}>
+              <FormTitle>We Offer</FormTitle>
+              {this.getAllInputFields(CONST.weOffer)}
+              <FormItem>
+                <Button
+                  type="dashed"
+                  onClick={() => this.add(CONST.weOffer)}
+                  style={{ width: "60%" }}
                 >
-                  <FieldText
-                    label="salary"
-                    type="number"
-                    value={salary}
-                    onChange={e => this.this.onInputFieldChange(e, "salary")}
-                    isRequired
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-            </Row>
-
-            <Title>Company Information</Title>
-            <Row>
-              <StyledCol md={4}>
-                <Field
-                  invalidMessage="Field is required!"
-                  isInvalid={nameErr}
-                  label="Company Name"
-                  isRequired
-                >
-                  <FieldText
-                    label="company-name"
-                    onChange={e => this.onInputFieldChange(e, "companyName")}
-                    isRequired
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-            </Row>
-            <Row>
-              <StyledCol md={4}>
-                <Field
-                  invalidMessage="Field is required!"
-                  isInvalid={emailErr}
-                  label="Company Email"
-                  isRequired
-                >
-                  <FieldText
-                    label="company-email"
-                    onChange={e => this.onInputFieldChange(e, "companyEmail")}
-                    isRequired
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-            </Row>
-            <Row>
-              <StyledCol md={8}>
-                <FieldTextArea
-                  value={aboutCompany}
-                  label="about-us"
-                  shouldFitContainer
-                  onChange={e => this.onInputFieldChange(e, "aboutCompany")}
-                />
-              </StyledCol>
-            </Row>
-
-            <Row>
-              <StyledCol>
-                <Field label="Facebook" isRequired>
-                  <FieldText
-                    label="facebook-url"
-                    onChange={e => this.onInputFieldChange(e, "companyEmail")}
-                    inputValue={facebookURL}
-                    isRequired
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-              <StyledCol>
-                <Field label="Instagram" isRequired>
-                  <FieldText
-                    label="instagram-url"
-                    onChange={e => this.onInputFieldChange(e, "companyName")}
-                    inputValue={instagramURL}
-                    isRequired
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-              <StyledCol>
-                <Field label="Medium" isRequired>
-                  <FieldText
-                    label="medium-url"
-                    onChange={e => this.onInputFieldChange(e, "companyName")}
-                    inputValue={mediumURL}
-                    isRequired
-                    shouldFitContainer
-                  />
-                </Field>
-              </StyledCol>
-            </Row>
-          </FormSection>
-          <FormFooter>
-            <Button type="submit" title="Submit" onClick={this.onSubmit} />
-          </FormFooter>
+                  <Icon type="plus" /> Add field
+                </Button>
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={2}>
+              <FormTitle>Salary</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("salary", {
+                  rules: [{ required: true, message: "Please input your username!" }]
+                })(<Input size="large" type="number" />)}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Title>Company Information</Title>
+          <Row>
+            <StyledCol md={4}>
+              <FormTitle>Company Name</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("company-name", {
+                  rules: [{ required: true, message: "Please input your username!" }]
+                })(<Input size="large" />)}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={4}>
+              <FormTitle>Company Email</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("company-email", {
+                  rules: [{ required: true, message: "Please input your username!" }]
+                })(<Input size="large" />)}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol md={8}>
+              <FormTitle>About Us</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("facebook", {
+                  rules: [{ required: false, message: "Please input your username!" }]
+                })(<TextArea size="large" />)}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
+            <StyledCol>
+              <FormTitle>Facebook</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("facebook", {
+                  rules: [{ required: false, message: "Please input your username!" }]
+                })(<Input size="large" />)}
+              </FormItem>
+            </StyledCol>
+            <StyledCol>
+              <FormTitle>Instagram</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("instagram", {
+                  rules: [{ required: false, message: "Please input your username!" }]
+                })(<Input size="large" />)}
+              </FormItem>
+            </StyledCol>
+            <StyledCol>
+              <FormTitle>Twitter</FormTitle>
+              <FormItem hasFeedback>
+                {getFieldDecorator("twitter", {
+                  rules: [{ required: false, message: "Please input your username!" }]
+                })(<Input size="large" />)}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
         </Form>
       </div>
     );
   }
 }
+
+export default Form.create()(PostPage);
