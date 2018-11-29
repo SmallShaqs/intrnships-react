@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Link } from "react-router-dom";
-
 import axios from "axios";
 
 import { BrowserRouter, Route } from "react-router-dom";
@@ -14,11 +12,6 @@ import Slogan from "../components/Slogan/Slogan";
 import Search from "../components/Search/Search";
 
 import JobCard from "../components/JobCard/JobCard";
-
-const StyleLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-`;
 
 const CenterSlogan = styled.div`
   margin: auto;
@@ -50,6 +43,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     axios.get("http://192.168.0.107:3000/post/get").then(response => {
+      console.log(response);
       this.setState({ response: response.data.msg, loaded: true });
     });
   }
@@ -66,14 +60,13 @@ export default class App extends React.Component {
           <Title>All</Title>
           {!this.state.loaded && <p>Loading..</p>}
           {this.state.response.map(res => (
-            <StyleLink to={`/view/${res._id}`}>
-              <JobCard
-                company={res.companyName}
-                position={res.position}
-                location={res.location}
-                tags={[res.mainLanguage, ...res.uniqueTags]}
-              />
-            </StyleLink>
+            <JobCard
+              id={res._id}
+              company={res.companyName}
+              position={res.position}
+              location={res.location}
+              tags={[res.mainLanguage, ...res.uniqueTags]}
+            />
           ))}
         </Center>
       </React.Fragment>

@@ -19,39 +19,6 @@ const Title = styled.p`
   margin-bottom: 60px;
 `;
 
-const jobActivities = [
-  "Code as part of an Agile product-focused software development team",
-  "Implement and enforce continuous integration and test - driven development practices",
-  "Develop and test code for services and integration tiers of an application component",
-  "Participate in Agile ceremonies including iteration planning, stand - ups and retrospective",
-  "Configure, deploy and troubleshoot applications"
-];
-
-const techRequirements = [
-  "At least 2 years of experience with Java Software Development in a similar position",
-  "Experience with object oriented programming",
-  "Experience with Java, experience with Java Script is a plus",
-  "Experience with Test Driven Development is a plus",
-  "Experience with modern web technology",
-  "Basic Knowledge of data bases(SQL, Oracle)",
-  "Experience with Agile is a plus",
-  "Education level: Bachelor / Master in Computer Science"
-];
-
-const personalRequirements = [
-  "Flexible and positive attitude",
-  "Interest in Business Intelligence, Process Management, Internal Control, Risk Management",
-  "Fluently in English, verbal and in writing"
-];
-
-const weOffer = [
-  "Opportunity to be part of a rapidly expanding global organization with irreproachable reputation",
-  "Open and colorful workplace with multicultural community",
-  "Opportunity to grow both professionally and personally",
-  "Inspiring working atmosphere and many engaging activities",
-  "Clear career path and extra benefits"
-];
-
 const facebookURL = "https://www.facebook.com/@company";
 const twitterURL = "https://www.twitter.com/@company";
 const instagramURL = "https://www.instagram.com/@company";
