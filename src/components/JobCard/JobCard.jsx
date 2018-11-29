@@ -29,7 +29,7 @@ const JobViews = styled.div``;
 
 const Grid = styled.div``;
 
-export default ({ company, position, tags, views, withEye = false, premium = false }) => {
+export default ({ company, position, tags, views, location, withEye = false, premium = false }) => {
   const [isPressed, setPressed] = React.useState(false);
 
   return (
@@ -40,8 +40,7 @@ export default ({ company, position, tags, views, withEye = false, premium = fal
         <Company>{company}</Company>
         <Title>{position}</Title>
         <Inline>
-          <Info>👨‍💻Software</Info>
-          <Info>🇩🇪Berlin, Germany</Info>
+          <Info>{location}</Info>
         </Inline>
       </CompanyInfo>
 

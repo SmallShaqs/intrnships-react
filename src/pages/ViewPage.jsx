@@ -7,6 +7,8 @@ import SubmitButton from "../components/buttons/CTA/CallToAction";
 import { Info } from "../components/JobCard/jobCard/styled";
 import FB_Logo from "../assets/fb_logo.png";
 
+import axios from "axios";
+
 const Title = styled.p`
   font-family: MaisonNeue-Demi;
   font-size: 24px;
@@ -81,94 +83,134 @@ const LinkTitle = styled(Title)`
   }
 `;
 
-export default () => (
-  <Container>
-    <img src={FB_Logo} style={{ width: 100, height: 100, marginTop: 40 }} />
+export default class ViewPage extends React.Component {
+  state = {
+    job: {},
+    company: {},
+    loaded: false
+  };
 
-    <JobTitle>Software Developer</JobTitle>
-    <CompanyName>Facebook</CompanyName>
+  componentDidMount() {
+    const { id } = this.props.match.params;
 
-    <Info>🇩🇪Berlin, Germany</Info>
-    <Info>Posted on: 2018-12-02</Info>
+    console.log(id);
+    axios.get("http://192.168.0.107:3000/post/get?id=" + id).then(response => {
+      this.setState({ job: response.data.msg });
+      axios
+        .get(
+          "http://192.168.0.107:3000/post/getCompany?name=" +
+            encodeURIComponent(this.state.job.companyName)
+        )
+        .then(response => {
+          this.setState({ company: response.data.msg, loaded: true }, () =>
+            console.log(this.state)
+          );
+        });
+    });
 
-    <Title>Job Description</Title>
-    <p style={{ whiteSpace: "pre-line" }}>
-      Cognizant (NASDAQ-100: CTSH) is one of the world's leading professional services companies,
-      transforming clients' business, operating and technology models for the digital era. Our
-      unique industry-based, consultative approach helps clients envision, build and run more
-      innovative and efficient businesses. Headquartered in the U.S., Cognizant is ranked 195 on the
-      Fortune 500 and is consistently listed among the most admired companies in the world. Learn
-      how Cognizant helps clients lead with digital at www.cognizant.com or follow us on Twitter:
-      Cognizant.
-    </p>
+    // /get/getCompany
+  }
 
-    <Title>Job Activities</Title>
-    {jobActivities.map(req => (
-      <p>- {req}</p>
-    ))}
+  render() {
+    const { job, loaded, company } = this.state;
 
-    <Row>
-      <Col lg={6}>
-        <Title>Tech Requirements</Title>
-        {techRequirements.map(req => (
-          <p>- {req}</p>
-        ))}
-      </Col>
-      <Col lg={6}>
-        <Title>Personal Requirements</Title>
-        {personalRequirements.map(req => (
-          <p>- {req}</p>
-        ))}
-      </Col>
-    </Row>
+    if (!loaded) return <p>Loading..</p>;
 
-    <Title>We Offer</Title>
-    {weOffer.map(offer => (
-      <p>- {offer}</p>
-    ))}
+    return (
+      <Container>
+        <img src={FB_Logo} style={{ width: 100, height: 100, marginTop: 40 }} />
 
-    <Title>Salary: {salary} e</Title>
-    <Container>
-      <Row justify="center">
-        <Col xs={12}>
-          <SubmitButton style={{ margin: "auto", width: 400 }} title="Apply" />
-        </Col>
-      </Row>
-    </Container>
+        <JobTitle>{job.position}</JobTitle>
+        <CompanyName>{company.name}</CompanyName>
 
-    {facebookURL || instagramURL || twitterURL ? (
-      <Container style={{ textAlign: "center" }}>
-        <Row justify="center">
-          <Col>
-            <MiniTitle>Find More About Us!</MiniTitle>
+        <Info>{job.location}</Info>
+        <Info>Posted on: 2018-12-02</Info>
 
-            {facebookURL ? (
-              <LinkTitle>
-                <a href={facebookURL}>Facebook</a>
-              </LinkTitle>
-            ) : null}
+        <Title>Job Description</Title>
+        <p style={{ whiteSpace: "pre-line" }}>{company.about}</p>
 
-            {instagramURL ? (
-              <LinkTitle>
-                <a href={instagramURL}>Instagram</a>
-              </LinkTitle>
-            ) : null}
+        {job.jobActivities.length ? (
+          <React.Fragment>
+            <Title>Job Activities</Title>
+            {job.jobActivities.map(req => (
+              <p>- {req}</p>
+            ))}
+          </React.Fragment>
+        ) : null}
 
-            {twitterURL ? (
-              <LinkTitle>
-                <a href={twitterURL}>Twitter</a>
-              </LinkTitle>
-            ) : null}
-          </Col>
+        <Row>
+          {job.technicalRequirements.length ? (
+            <Col lg={6}>
+              <Title>Tech Requirements</Title>
+              {job.technicalRequirements.map(req => (
+                <p>- {req}</p>
+              ))}
+            </Col>
+          ) : null}
+
+          {job.personalRequirements.length ? (
+            <Col lg={6}>
+              <Title>Personal Requirements</Title>
+              {job.personalRequirements.map(req => (
+                <p>- {req}</p>
+              ))}
+            </Col>
+          ) : null}
         </Row>
+
+        {job.weOffer.length ? (
+          <React.Fragment>
+            <Title>We Offer</Title>
+            {job.weOffer.map(offer => (
+              <p>- {offer}</p>
+            ))}
+          </React.Fragment>
+        ) : null}
+
+        <Title>Salary: {job.salary} e</Title>
+        <Container>
+          <Row justify="center">
+            <Col xs={12}>
+              <SubmitButton style={{ margin: "auto", width: 400 }} title="Apply" />
+            </Col>
+          </Row>
+        </Container>
+
+        {company.facebook || company.instagram || company.twitter ? (
+          <Container style={{ textAlign: "center" }}>
+            <Row justify="center">
+              <Col>
+                <MiniTitle>Find More About Us!</MiniTitle>
+
+                {company.facebook ? (
+                  <LinkTitle>
+                    <a href={company.facebook}>Facebook</a>
+                  </LinkTitle>
+                ) : null}
+
+                {company.instagram ? (
+                  <LinkTitle>
+                    <a href={company.instagram}>Instagram</a>
+                  </LinkTitle>
+                ) : null}
+
+                {company.twitter ? (
+                  <LinkTitle>
+                    <a href={company.twitter}>Twitter</a>
+                  </LinkTitle>
+                ) : null}
+              </Col>
+            </Row>
+          </Container>
+        ) : null}
+        <Container style={{ textAlign: "center", margin: 20 }}>
+          <Row justify="center">
+            <Col xs={12}>
+              <img src={FB_Logo} style={{ width: 30, height: 30 }} />
+            </Col>
+          </Row>
+        </Container>
       </Container>
-    ) : null}
-    <Container style={{ textAlign: "center", margin: 20 }}>
-      <Row justify="center">
-        <Col xs={12}>
-          <img src={FB_Logo} style={{ width: 30, height: 30 }} />
-        </Col>
-      </Row>
-    </Container>
-  </Container>
-);
+    );
+  }
+}

@@ -10,13 +10,13 @@ import PostPage from "./pages/PostPage";
 import ViewPage from "./pages/ViewPage";
 
 export default () => (
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <React.Fragment>
       <PageContainer>
         <Header />
         <Route path="/" exact component={MainPage} />
         <Route path="/post" exact component={PostPage} />
-        <Route path="/view" exact component={ViewPage} />
+        <Route path="/view/:id" exact component={ViewPage} />
       </PageContainer>
       <Footer />
     </React.Fragment>

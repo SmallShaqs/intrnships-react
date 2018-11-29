@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import { Container, Row, Col } from "react-grid-system";
 
@@ -34,8 +35,8 @@ const Title = styled.p`
   color: #000000;
   letter-spacing: 1.8px;
 
-  margin-top: 100px;
-  margin-bottom: 60px;
+  margin-top: 40px;
+  margin-bottom: 20px;
 `;
 
 const StyledCol = styled(Col)`
@@ -60,14 +61,14 @@ const DescriptionText = styled.span`
 
 const CONST = {
   jobActivities: 0,
-  techRequirements: 1,
+  technicalRequirements: 1,
   personalRequirements: 2,
   weOffer: 3
 };
 
 const NAMES = {
   0: "jobActivities",
-  1: "techRequirements",
+  1: "technicalRequirements",
   2: "personalRequirements",
   3: "weOffer"
 };
@@ -76,7 +77,8 @@ let multipleFields = [0, 0, 0, 0];
 
 class PostPage extends React.Component {
   state = {
-    submitted: undefined
+    submitted: undefined,
+    languages: []
   };
 
   remove = (k, distinctID) => {
@@ -114,6 +116,11 @@ class PostPage extends React.Component {
   componentDidMount() {
     const { form } = this.props;
     form.setFieldsValue({ keys: [[], [], [], []] });
+
+    axios.get("http://192.168.0.107:3000/language/get").then(response => {
+      console.log(response);
+      this.setState({ languages: response.data.msg });
+    });
   }
 
   getAllInputFields = distincID => {
@@ -157,13 +164,10 @@ class PostPage extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (err) this.setState({ submitted: false });
       else {
-        console.log("Received values of form: ", values);
-        console.log(values);
-
         const results = {
           weOffer: [],
           personalRequirements: [],
-          techRequirements: [],
+          technicalRequirements: [],
           jobActivities: [],
           ...values
         };
@@ -172,16 +176,21 @@ class PostPage extends React.Component {
           ...results,
           weOffer: results.weOffer.filter(String),
           personalRequirements: results.personalRequirements.filter(String),
-          techRequirements: results.techRequirements.filter(String),
+          technicalRequirements: results.technicalRequirements.filter(String),
           jobActivities: results.jobActivities.filter(String)
         };
 
-        // http call
-        // get response
-        console.log(finalResults);
-
-        this.props.form.resetFields();
-        this.setState({ submitted: true });
+        axios
+          .post("http://192.168.0.107:3000/post/add", {
+            ...finalResults
+          })
+          .then(response => {
+            this.props.form.resetFields();
+            this.setState({ submitted: true });
+          })
+          .catch(err => {
+            this.setState({ submitted: false });
+          });
       }
     });
   };
@@ -211,12 +220,13 @@ class PostPage extends React.Component {
                 <FormTitle>Main Language</FormTitle>
               </Badge>
               <FormItem hasFeedback>
-                {getFieldDecorator("main-language", {
+                {getFieldDecorator("mainLanguage", {
                   rules: [{ required: true, message: "Please select the main language!" }]
                 })(
                   <Select size="large" placeholder="Golang">
-                    <Option value="react">React</Option>
-                    <Option value="golang">Golang</Option>
+                    {this.state.languages.map(lg => (
+                      <Option value={lg}>{lg}</Option>
+                    ))}
                   </Select>
                 )}
               </FormItem>
@@ -226,12 +236,13 @@ class PostPage extends React.Component {
                 <FormTitle>Optional Languages</FormTitle>
               </Badge>
               <FormItem hasFeedback>
-                {getFieldDecorator("optional-language", {
+                {getFieldDecorator("uniqueTags", {
                   rules: [{ required: true, message: "Please select optional languages!" }]
                 })(
                   <Select mode="multiple" size="large" placeholder="Node.js, React">
-                    <Option value="node">Node.js</Option>
-                    <Option value="golang">Golang</Option>
+                    {this.state.languages.map(lg => (
+                      <Option value={lg}>{lg}</Option>
+                    ))}
                   </Select>
                 )}
               </FormItem>
@@ -255,11 +266,11 @@ class PostPage extends React.Component {
           <Row>
             <StyledCol md={8}>
               <FormTitle>Tech Requirements</FormTitle>
-              {this.getAllInputFields(CONST.techRequirements)}
+              {this.getAllInputFields(CONST.technicalRequirements)}
               <FormItem>
                 <Button
                   type="dashed"
-                  onClick={() => this.add(CONST.techRequirements)}
+                  onClick={() => this.add(CONST.technicalRequirements)}
                   style={{ width: "60%" }}
                 >
                   <Icon type="plus" /> Add field
@@ -298,6 +309,24 @@ class PostPage extends React.Component {
             </StyledCol>
           </Row>
           <Row>
+            <StyledCol lg={4}>
+              <Badge dot>
+                <FormTitle>Location</FormTitle>
+              </Badge>
+              <FormItem hasFeedback>
+                {getFieldDecorator("location", {
+                  rules: [{ required: true, message: "Please select optional languages!" }]
+                })(
+                  <Select size="large" placeholder="Vilnius">
+                    <Option value="Vilnius">Vilnius</Option>
+                    <Option value="Kaunas">Kaunas</Option>
+                    <Option value="Klaipėda">Klaipėda</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </StyledCol>
+          </Row>
+          <Row>
             <StyledCol md={4}>
               <Badge dot>
                 <FormTitle>Salary</FormTitle>
@@ -325,7 +354,7 @@ class PostPage extends React.Component {
                 <FormTitle>Company Name</FormTitle>
               </Badge>
               <FormItem hasFeedback>
-                {getFieldDecorator("company-name", {
+                {getFieldDecorator("name", {
                   rules: [{ required: true, message: "Please input your companies name!" }]
                 })(<Input size="large" placeholder="Company" />)}
               </FormItem>
@@ -337,7 +366,7 @@ class PostPage extends React.Component {
                 <FormTitle>Company Email</FormTitle>
               </Badge>
               <FormItem hasFeedback>
-                {getFieldDecorator("company-email", {
+                {getFieldDecorator("email", {
                   rules: [{ required: true, message: "Please input your companies email!" }]
                 })(<Input size="large" placeholder="HR@company.com" />)}
               </FormItem>
@@ -349,7 +378,7 @@ class PostPage extends React.Component {
                 <FormTitle>About Us</FormTitle>
               </Badge>
               <FormItem hasFeedback>
-                {getFieldDecorator("about-us", {
+                {getFieldDecorator("about", {
                   rules: [{ required: true, message: "Don't be shy to tell about yourself!" }]
                 })(
                   <TextArea
