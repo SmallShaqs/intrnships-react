@@ -23,10 +23,12 @@ const RedButton = styled.div`
     background-color: #db0033;
     cursor: pointer;
   }
+
+  ${({ style }) => style}
 `;
 
-export default ({ title, type = undefined, onClick = () => {} }) => (
-  <RedButton type={type} onClick={onClick}>
+export default ({ title, type = undefined, onClick = () => {}, style = {} }) => (
+  <RedButton style={style} type={type} onClick={onClick}>
     {title}
   </RedButton>
 );

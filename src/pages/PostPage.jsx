@@ -6,6 +6,7 @@ import { Container, Row, Col } from "react-grid-system";
 import SubmitButton from "../components/buttons/CTA/CallToAction";
 
 import {
+  Alert,
   Form,
   Badge,
   Select,
@@ -29,7 +30,7 @@ const FormItem = Form.Item;
 
 const Title = styled.p`
   font-family: MaisonNeue-Demi;
-  font-size: 22px;
+  font-size: 24px;
   color: #000000;
   letter-spacing: 1.8px;
 
@@ -50,6 +51,13 @@ const FormTitle = styled.p`
   text-transform: uppercase;
 `;
 
+const DescriptionText = styled.span`
+  font-weight: 500;
+  font-size: 11px;
+  margin: 0px;
+  padding: 0px;
+`;
+
 const CONST = {
   jobActivities: 0,
   techRequirements: 1,
@@ -67,6 +75,10 @@ const NAMES = {
 let multipleFields = [0, 0, 0, 0];
 
 class PostPage extends React.Component {
+  state = {
+    submitted: undefined
+  };
+
   remove = (k, distinctID) => {
     const { form } = this.props;
     // can use data-binding to get
@@ -143,27 +155,34 @@ class PostPage extends React.Component {
     e.preventDefault();
 
     this.props.form.validateFields((err, values) => {
-      // if (!err) {
-      console.log("Received values of form: ", values);
-      console.log(values);
+      if (err) this.setState({ submitted: false });
+      else {
+        console.log("Received values of form: ", values);
+        console.log(values);
 
-      const results = {
-        weOffer: [],
-        personalRequirements: [],
-        techRequirements: [],
-        jobActivities: [],
-        ...values
-      };
+        const results = {
+          weOffer: [],
+          personalRequirements: [],
+          techRequirements: [],
+          jobActivities: [],
+          ...values
+        };
 
-      const finalResults = {
-        ...results,
-        weOffer: results.weOffer.filter(String),
-        personalRequirements: results.personalRequirements.filter(String),
-        techRequirements: results.techRequirements.filter(String),
-        jobActivities: results.jobActivities.filter(String)
-      };
+        const finalResults = {
+          ...results,
+          weOffer: results.weOffer.filter(String),
+          personalRequirements: results.personalRequirements.filter(String),
+          techRequirements: results.techRequirements.filter(String),
+          jobActivities: results.jobActivities.filter(String)
+        };
 
-      console.log(finalResults);
+        // http call
+        // get response
+        console.log(finalResults);
+
+        this.props.form.resetFields();
+        this.setState({ submitted: true });
+      }
     });
   };
 
@@ -171,7 +190,7 @@ class PostPage extends React.Component {
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     return (
-      <div>
+      <Container>
         <Form>
           <Title>Job Information</Title>
           <Row>
@@ -182,20 +201,20 @@ class PostPage extends React.Component {
               <FormItem hasFeedback>
                 {getFieldDecorator("position", {
                   rules: [{ required: true, message: "Please input the position!" }]
-                })(<Input size="large" />)}
+                })(<Input size="large" placeholder="Software Developer" />)}
               </FormItem>
             </StyledCol>
           </Row>
           <Row>
             <StyledCol lg={4}>
-              <Badge dot>
+              <Badge dot style={{ marginRight: 8 }}>
                 <FormTitle>Main Language</FormTitle>
               </Badge>
               <FormItem hasFeedback>
                 {getFieldDecorator("main-language", {
                   rules: [{ required: true, message: "Please select the main language!" }]
                 })(
-                  <Select size="large">
+                  <Select size="large" placeholder="Golang">
                     <Option value="react">React</Option>
                     <Option value="golang">Golang</Option>
                   </Select>
@@ -204,13 +223,13 @@ class PostPage extends React.Component {
             </StyledCol>
             <StyledCol lg={4}>
               <Badge dot>
-                <FormTitle>Optional Language</FormTitle>
+                <FormTitle>Optional Languages</FormTitle>
               </Badge>
               <FormItem hasFeedback>
                 {getFieldDecorator("optional-language", {
                   rules: [{ required: true, message: "Please select optional languages!" }]
                 })(
-                  <Select mode="multiple" size="large">
+                  <Select mode="multiple" size="large" placeholder="Node.js, React">
                     <Option value="node">Node.js</Option>
                     <Option value="golang">Golang</Option>
                   </Select>
@@ -289,6 +308,7 @@ class PostPage extends React.Component {
                 })(
                   <InputNumber
                     initialValue={0}
+                    placeholder="800"
                     formatter={value => `€ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     parser={value => value.replace(/\€\s?|(,*)/g, "")}
                     size="large"
@@ -300,26 +320,26 @@ class PostPage extends React.Component {
           </Row>
           <Title>Company Information</Title>
           <Row>
-            <StyledCol md={4}>
+            <StyledCol md={6} lg={4}>
               <Badge dot>
                 <FormTitle>Company Name</FormTitle>
               </Badge>
               <FormItem hasFeedback>
                 {getFieldDecorator("company-name", {
                   rules: [{ required: true, message: "Please input your companies name!" }]
-                })(<Input size="large" />)}
+                })(<Input size="large" placeholder="Company" />)}
               </FormItem>
             </StyledCol>
           </Row>
           <Row>
-            <StyledCol md={4}>
+            <StyledCol md={6} lg={4}>
               <Badge dot>
                 <FormTitle>Company Email</FormTitle>
               </Badge>
               <FormItem hasFeedback>
                 {getFieldDecorator("company-email", {
                   rules: [{ required: true, message: "Please input your companies email!" }]
-                })(<Input size="large" />)}
+                })(<Input size="large" placeholder="HR@company.com" />)}
               </FormItem>
             </StyledCol>
           </Row>
@@ -330,40 +350,65 @@ class PostPage extends React.Component {
               </Badge>
               <FormItem hasFeedback>
                 {getFieldDecorator("about-us", {
-                  rules: [{ required: true, message: "Please tell more about you :)" }]
-                })(<TextArea autosize={{ minRows: 6 }} size="large" />)}
+                  rules: [{ required: true, message: "Don't be shy to tell about yourself!" }]
+                })(
+                  <TextArea
+                    placeholder="A fast growing company who is taking over the Fintech industry..."
+                    autosize={{ minRows: 6 }}
+                    size="large"
+                  />
+                )}
               </FormItem>
             </StyledCol>
           </Row>
           <Row>
-            <StyledCol>
+            <StyledCol md={4}>
               <FormTitle>Facebook</FormTitle>
               <FormItem hasFeedback>
                 {getFieldDecorator("facebook", {
                   rules: [{ required: false }]
-                })(<Input size="large" />)}
+                })(<Input size="large" placeholder="https://www.facebook.com/company" />)}
               </FormItem>
             </StyledCol>
-            <StyledCol>
+            <StyledCol md={4}>
               <FormTitle>Instagram</FormTitle>
               <FormItem hasFeedback>
                 {getFieldDecorator("instagram", {
                   rules: [{ required: false }]
-                })(<Input size="large" />)}
+                })(<Input size="large" placeholder="https://www.instagram/@company" />)}
               </FormItem>
             </StyledCol>
-            <StyledCol>
+            <StyledCol md={4}>
               <FormTitle>Twitter</FormTitle>
               <FormItem hasFeedback>
                 {getFieldDecorator("twitter", {
                   rules: [{ required: false }]
-                })(<Input size="large" />)}
+                })(<Input size="large" placeholder="https://www.twitter.com/company" />)}
               </FormItem>
             </StyledCol>
           </Row>
+          {this.state.submitted == true ? (
+            <Alert
+              message="Success Tips"
+              description="Your job posting was succesfully submitted!"
+              type="success"
+              showIcon
+              style={{ margin: "20px 0" }}
+            />
+          ) : null}
+          {this.state.submitted == false ? (
+            <Alert
+              message="Error"
+              description="Please double check all the errors!"
+              type="error"
+              showIcon
+              style={{ margin: "20px 0" }}
+            />
+          ) : null}
+
           <SubmitButton onClick={this.handleSubmit} title="Submit" htmlType="submit" />
         </Form>
-      </div>
+      </Container>
     );
   }
 }

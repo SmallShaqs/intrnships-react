@@ -33,14 +33,10 @@ const Title = styled.p`
   margin: 50px;
 `;
 
-const AppWrapper = styled.div`
-  font-family: MaisonNeue-Book;
-`;
-
 export default class App extends React.Component {
   render() {
     return (
-      <AppWrapper>
+      <React.Fragment>
         <CenterSlogan>
           <Slogan />
           <Search />
@@ -69,7 +65,7 @@ export default class App extends React.Component {
           <JobCard company="Palantir" position="Java Deveoper" tags={["Java", "Kubernetes"]} />
           <JobCard company="Airbnb" position="ML Scientist" tags={["ML", "Python"]} />
         </Center>
-      </AppWrapper>
+      </React.Fragment>
     );
   }
 }
