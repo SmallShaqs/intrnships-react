@@ -8,6 +8,7 @@
     "@atlaskit/field-text-area": "^4.0.12",
     "@atlaskit/form": "^4.0.19",
     "@atlaskit/select": "^6.1.9",
+    "antd": "^3.10.9",
     "gh-pages": "^2.0.1",
     "react": "16.7.0-alpha",
     "react-dom": "16.7.0-alpha",
