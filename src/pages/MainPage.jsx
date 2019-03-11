@@ -42,7 +42,7 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    axios.get("http://192.168.0.107:3000/post/get").then(response => {
+    axios.get("/api/post/get").then(response => {
       console.log(response);
       this.setState({ response: response.data.msg, loaded: true });
     });

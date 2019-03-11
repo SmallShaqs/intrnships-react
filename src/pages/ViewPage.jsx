@@ -61,11 +61,11 @@ export default class ViewPage extends React.Component {
     const { id } = this.props.match.params;
 
     console.log(id);
-    axios.get("http://192.168.0.107:3000/post/get?id=" + id).then(response => {
+    axios.get("/api/post/get?id=" + id).then(response => {
       this.setState({ job: response.data.msg });
       axios
         .get(
-          "http://192.168.0.107:3000/post/getCompany?name=" +
+          "/api/post/getCompany?name=" +
             encodeURIComponent(this.state.job.companyName)
         )
         .then(response => {

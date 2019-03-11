@@ -117,7 +117,7 @@ class PostPage extends React.Component {
     const { form } = this.props;
     form.setFieldsValue({ keys: [[], [], [], []] });
 
-    axios.get("http://192.168.0.107:3000/language/get").then(response => {
+    axios.get("/api/language/get").then(response => {
       console.log(response);
       this.setState({ languages: response.data.msg });
     });
@@ -181,7 +181,7 @@ class PostPage extends React.Component {
         };
 
         axios
-          .post("http://192.168.0.107:3000/post/add", {
+          .post("/api/post/add", {
             ...finalResults
           })
           .then(response => {
