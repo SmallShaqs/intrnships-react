@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM nginx
 ENV API_HOST intrnships-api
 WORKDIR /usr/src/app
 COPY . .
