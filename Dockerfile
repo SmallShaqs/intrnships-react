@@ -7,4 +7,4 @@ FROM nginx:alpine
 # COPY build /usr/share/nginx/html/
 # ENTRYPOINT [ "./entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
-EXPOSE 8080
+EXPOSE 80
